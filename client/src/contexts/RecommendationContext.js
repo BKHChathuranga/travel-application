@@ -6,6 +6,7 @@ export const RecommendationProvider = ({ children }) => {
   const [recommendations, setRecommendations] = useState([]);
 
   const updateRecommendations = (newRecommendations) => {
+    console.log("hehe mn wada", newRecommendations)
     setRecommendations(newRecommendations);
   };
 

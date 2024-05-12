@@ -13,43 +13,52 @@ import {
   getRandomDestinations,
   getRandomTransportation,
 } from "../api/api";
-
+import { useAuth } from "../contexts/AuthContext";
+import { useRecommendation } from "../contexts/RecommendationContext";
 function Home() {
+  const { isUsingRecommendation } = useAuth();
+  const { recommendations } = useRecommendation();
   const [destinations, setDestinations] = useState([]);
   const [accommodations, setAccommodations] = useState([]);
   const [transportations, setTransportations] = useState([]);
 
   const [visibleCards, setVisibleCards] = useState(3); // State to manage the number of visible cards
   const totalCards = 4; // Total number of cards available
-
+  console.log(recommendations, "reco");
   useEffect(() => {
     // Fetch destinations
-    getRandomDestinations()
-      .then((response) => {
-        setDestinations(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching destinations:", error);
-      });
+    if (!isUsingRecommendation) {
+      getRandomDestinations()
+        .then((response) => {
+          setDestinations(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching destinations:", error);
+        });
 
-    // Fetch accommodations
-    getRandomAccommodations()
-      .then((response) => {
-        setAccommodations(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching accommodations:", error);
-      });
+      // Fetch accommodations
+      getRandomAccommodations()
+        .then((response) => {
+          setAccommodations(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching accommodations:", error);
+        });
 
-    // Fetch transportation
-    getRandomTransportation()
-      .then((response) => {
-        setTransportations(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching transportation:", error);
-      });
-  }, []);
+      // Fetch transportation
+      getRandomTransportation()
+        .then((response) => {
+          setTransportations(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching transportation:", error);
+        });
+    } else {
+      setDestinations(recommendations.destinations);
+      setAccommodations(recommendations.accommodations);
+      setTransportations(recommendations.transportation);
+    }
+  }, [isUsingRecommendation]);
 
   // Transportation page
   const handleViewAllClickTrans = () => {
@@ -88,7 +97,11 @@ function Home() {
               {transportations
                 .slice(0, visibleCards)
                 .map((transportation, index) => (
-                  <Card key={index} data={transportation} type="transportation"/>
+                  <Card
+                    key={index}
+                    data={transportation}
+                    type="transportation"
+                  />
                 ))}
             </div>
             <div className="Button-view-all">
@@ -111,7 +124,7 @@ function Home() {
             {accommodations
               .slice(0, visibleCards)
               .map((accommodation, index) => (
-                <Card key={index} data={accommodation} type="accommodation"/>
+                <Card key={index} data={accommodation} type="accommodation" />
               ))}
           </div>
           <div className="Button-view-all">
@@ -131,7 +144,7 @@ function Home() {
           </div>
           <div className="card-items-trans">
             {destinations.slice(0, visibleCards).map((destination, index) => (
-              <Card key={index} data={destination} type="destination"/>
+              <Card key={index} data={destination} type="destination" />
             ))}
           </div>
           <div className="Button-view-all">

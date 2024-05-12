@@ -22,14 +22,14 @@ function Card({ data, type }) {
             <img src={image1} />
           </div>
           <div className="title-rating">
-            <h2>{data.Name}</h2>
+            <h2>{data.Name} {data.name}</h2>
             <div className="rating">
               <span className="star">&#9733;</span>
               <p className="rating-number">{(Math.random() * 5).toFixed(1)}</p>
             </div>
           </div>
           <div className="card-middle">
-            <p>{data.District}</p>
+            <p>{data.District}{data.district}</p>
           </div>
           <div className="card-guidlines">
             <ul>
@@ -46,14 +46,14 @@ function Card({ data, type }) {
             <img src={image1} />
           </div>
           <div className="title-rating">
-            <h2>{data.Name}</h2>
+            <h2>{data.Name}{data.name}</h2>
             <div className="rating">
               <span className="star">&#9733;</span>
               <p className="rating-number">{data.Grade?.toLowerCase()}</p>
             </div>
           </div>
           <div className="card-middle">
-            <p>{data.District}</p>
+            <p>{data.District}{data.district}</p>
           </div>
 
           <div className="card-guidlines">
@@ -73,15 +73,15 @@ function Card({ data, type }) {
             <img src={image1} />
           </div>
           <div className="title-rating">
-            <h2>{data.Destination}</h2>
+            <h2>{data.Destination} {data.name}</h2>
             <div className="rating">
               <span className="star">&#9733;</span>
-              <p className="rating-number">{data.Rating}</p>
+              <p className="rating-number">{data.Rating}{data.rating}</p>
             </div>
           </div>
           <div className="card-middle">
             <p>
-              {data["Destination Type"]} - {data.District}
+              {data["Destination Type"]} {data["destination_type"]} - {data.District}{data.district}
             </p>
           </div>
           <div className="card-body">

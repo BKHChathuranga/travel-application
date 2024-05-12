@@ -3,8 +3,10 @@ import Loginart from "../assets/Loginart.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getRecommendations } from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
+import { useRecommendation } from "../contexts/RecommendationContext";
 
 function AccomQuection() {
+  const { updateRecommendations } = useRecommendation();
   const location = useLocation();
   const navigate = useNavigate();
   const { setIsUsingRecommendation } = useAuth();
@@ -16,19 +18,20 @@ function AccomQuection() {
   };
 
   const handleNext = async () => {
-    console.log(selectedAnswer,answer)
+
     try {
       // Send both selected answers to the backend via an API call
       const response = await getRecommendations({
         category: selectedAnswer,
         location: answer,
       });
-      if(response.status === 200){
+
+      if (response.status === 200) {
+        updateRecommendations(response.data);
         setIsUsingRecommendation(true);
-        navigate('/')
+        navigate("/");
       }
-      console.log("Answers sent successfully:", response);
-      // Redirect or perform any other action after sending answers
+      console.log("Answers sent successfully:");
     } catch (error) {
       console.error("Error sending answers:", error);
       // Handle error, e.g., display an error message
