@@ -53,18 +53,18 @@ function Home() {
             console.error("Error fetching transportation:", error);
           });
       } else {
-        
         try {
           const destinationsResponse = await getDestinations({
             category: localStorage.getItem("firstAnswer"),
           });
           const recommendationsResponse = await getRecommendations({
-            category: localStorage.getItem("thirdAnswer"),
-            location: localStorage.getItem("secondAnswer"),
+            first: localStorage.getItem("firstAnswer"),
+            third: localStorage.getItem("thirdAnswer"),
+            second: localStorage.getItem("secondAnswer"),
           });
           if (recommendationsResponse.status === 200) {
-            console.log(recommendationsResponse.data.accommodations, "reco");
-            setDestinations(recommendationsResponse.data.destinations);
+            console.log(recommendationsResponse);
+            setDestinations(recommendationsResponse.data.destinations_picked);
             setAccommodations(recommendationsResponse.data.accommodations);
             setTransportations(recommendationsResponse.data.transportation);
           }
@@ -122,6 +122,9 @@ function Home() {
                       feature="other"
                     />
                   ))}
+              {transportations.length === 0 && (
+                <p>No Transportaion Data to be Displayed</p>
+              )}
             </div>
             <div className="Button-view-all">
               {visibleCards < transportations?.length ? (
@@ -144,8 +147,16 @@ function Home() {
               accommodations
                 ?.slice(0, visibleCards)
                 ?.map((accommodation, index) => (
-                  <Card key={index} data={accommodation} type="accommodation" feature="other"/>
+                  <Card
+                    key={index}
+                    data={accommodation}
+                    type="accommodation"
+                    feature="other"
+                  />
                 ))}
+                {accommodations.length === 0 && (
+                <p>No Accomadation Data to be Displayed</p>
+              )}
           </div>
           <div className="Button-view-all">
             {visibleCards < accommodations?.length ? (
@@ -163,9 +174,15 @@ function Home() {
             <h1>Destinations</h1>
           </div>
           <div className="card-items-trans">
-            {destinations && destinations?.slice(0, visibleCards)?.map((destination, index) => (
-              <Card key={index} data={destination} type="destination" />
-            ))}
+            {destinations &&
+              destinations
+                ?.slice(0, visibleCards)
+                ?.map((destination, index) => (
+                  <Card key={index} data={destination} type="destination" />
+                ))}
+                {destinations.length === 0 && (
+                <p>No Destination Data to be Displayed</p>
+              )}
           </div>
           <div className="Button-view-all">
             {visibleCards < destinations?.length ? (

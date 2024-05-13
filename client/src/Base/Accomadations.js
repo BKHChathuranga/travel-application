@@ -59,8 +59,9 @@ function Accomadations() {
             category: localStorage.getItem("firstAnswer"),
           });
           const recommendationsResponse = await getRecommendations({
-            category: localStorage.getItem("thirdAnswer"),
-            location: localStorage.getItem("secondAnswer"),
+            first: localStorage.getItem("firstAnswer"),
+            third: localStorage.getItem("thirdAnswer"),
+            second: localStorage.getItem("secondAnswer"),
           });
           if (recommendationsResponse.status === 200) {
             setAccommodations(recommendationsResponse.data.accommodations);
@@ -98,60 +99,22 @@ function Accomadations() {
           Search
         </button>
       </form>
-      {/* <div className='location-card-container'>
-        {[...Array(cardCount)].map((_, index) => (
-          <CardLocation key={index} />
-        ))}
-      </div>
-      <div className='load-more-btn-wrapper'>
-        {!showAllCards ? (
-          <button onClick={handleLoadMore} className="load-button">
-            Load More ({totalCount - initialCardCount} more)
-          </button>
-        ) : (
-          <button onClick={handleLoadLess} className="load-button">
-            Load Less
-          </button>
-        )}
-      </div> */}
-
-      <h4 className="sub-title-one">Other Accommodations</h4>
-      <div
-        className="own-card-area"
-        style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
-      >
-        <div
-          className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
-        >
-          {accommodations
-            ?.filter(
-              (accommodation) =>
-                !(
-                  accommodation.Name?.toLowerCase().includes("villa") ||
-                  accommodation.Name?.toLowerCase().includes("hotel") ||
-                  accommodation.Name?.toLowerCase().includes("rest house") ||
-                  accommodation.name?.toLowerCase().includes("villa") ||
-                  accommodation.name?.toLowerCase().includes("hotel") ||
-                  accommodation.name?.toLowerCase().includes("rest house")
-                )
-            )
-            ?.map((accommodation) => (
-              <Card
-                key={accommodation.id}
-                data={accommodation}
-                type="accommodation"
-                feature="other"
-              />
-            ))}
-        </div>
-      </div>
       <h4 className="sub-title-one">Villas</h4>
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap" , justifyContent:'center' }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
+          {accommodations?.filter(
+            (accommodation) =>
+              accommodation.Name?.toLowerCase().includes("villa") ||
+              accommodation.name?.toLowerCase().includes("villa")
+          ).length === 0 && <p>No Villa Data to be Displayed</p>}
           {accommodations
             ?.filter(
               (accommodation) =>
@@ -173,8 +136,18 @@ function Accomadations() {
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
+          {accommodations?.filter(
+            (accommodation) =>
+              accommodation.Name?.toLowerCase().includes("rest") ||
+              accommodation.name?.toLowerCase().includes("rest")
+          ).length === 0 && <p>No Rest House Data to be Displayed</p>}
           {accommodations
             ?.filter(
               (accommodation) =>
@@ -187,6 +160,58 @@ function Accomadations() {
                 data={accommodation}
                 type="accommodation"
                 feature="rest"
+              />
+            ))}
+        </div>
+      </div>
+      <h4 className="sub-title-one">Other Accommodations</h4>
+      <div
+        className="own-card-area"
+        style={{
+          width: "100%",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          className="own-cards-area"
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {accommodations?.filter(
+            (accommodation) =>
+              !(
+                accommodation.Name?.toLowerCase().includes("villa") ||
+                accommodation.Name?.toLowerCase().includes("hotel") ||
+                accommodation.Name?.toLowerCase().includes("rest house") ||
+                accommodation.name?.toLowerCase().includes("villa") ||
+                accommodation.name?.toLowerCase().includes("hotel") ||
+                accommodation.name?.toLowerCase().includes("rest house")
+              )
+          ).length === 0 && <p>No Hotel Data to be Displayed</p>}
+          {accommodations
+            ?.filter(
+              (accommodation) =>
+                !(
+                  accommodation.Name?.toLowerCase().includes("villa") ||
+                  accommodation.Name?.toLowerCase().includes("hotel") ||
+                  accommodation.Name?.toLowerCase().includes("rest house") ||
+                  accommodation.name?.toLowerCase().includes("villa") ||
+                  accommodation.name?.toLowerCase().includes("hotel") ||
+                  accommodation.name?.toLowerCase().includes("rest house")
+                )
+            )
+            ?.map((accommodation) => (
+              <Card
+                key={accommodation.id}
+                data={accommodation}
+                type="accommodation"
+                feature="other"
               />
             ))}
         </div>

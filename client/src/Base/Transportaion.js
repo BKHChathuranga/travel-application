@@ -47,12 +47,12 @@ function Transportation() {
           category: localStorage.getItem("firstAnswer"),
         });
         const recommendationsResponse = await getRecommendations({
-          category: localStorage.getItem("thirdAnswer"),
-          location: localStorage.getItem("secondAnswer"),
+          first:localStorage.getItem("firstAnswer"),
+            third: localStorage.getItem("thirdAnswer"),
+            second: localStorage.getItem("secondAnswer"),
         });
         if (recommendationsResponse.status === 200) {
           setTransportations(recommendationsResponse.data.transportation);
-          console.log(recommendationsResponse.data.transportation);
         }
       }
     } catch (error) {
@@ -101,30 +101,19 @@ function Transportation() {
           Search
         </button>
       </form>
-      {/* <div className="location-card-container">
-        {[...Array(cardCount)].map((_, index) => (
-          <Card key={index} data={{}} type="transportation" />
-        ))}
-      </div>
-      <div className="load-more-btn-wrapper">
-        {!showAllCards ? (
-          <button onClick={handleLoadMore} className="load-button">
-            Load More ({totalCount - initialCardCount} more)
-          </button>
-        ) : (
-          <button onClick={handleLoadLess} className="load-button">
-            Load Less
-          </button>
-        )}
-      </div> */}
-
-      {/* Vehicle Renting */}
       <h4 className="sub-title-one">Vehicle Renting</h4>
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
-        >
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >{
+          transportations.filter((transportation) =>transportation.name?.toLowerCase().includes("rent") ||transportation.Name?.toLowerCase().includes("rent")).length === 0 && (<p>No Vehicle Renting Service to be Displayed</p>)
+        }
           {transportations
             .filter(
               (transportation) =>
@@ -144,31 +133,8 @@ function Transportation() {
               transportation.name?.toLowerCase().includes("rent") ||
               transportation.Name?.toLowerCase().includes("rent")
           ).length > initialCardCount && !showMore.renting ? (
-            <div className="load-more-btn-wrapper">
-              {/* <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, renting: true }))
-                }
-                className="load-button"
-              >
-                Load More (
-                {transportations.filter((transportation) =>
-                  transportation.name?.toLowerCase().includes("rent") || transportation.Name?.toLowerCase().includes("rent")
-                ).length - initialCardCount}{" "}
-                more)
-              </button> */}
-            </div>
+            <div className="load-more-btn-wrapper"></div>
           ) : (
-            // showMore.renting && (
-            //   <button
-            //     onClick={() =>
-            //       setShowMore((prevState) => ({ ...prevState, renting: false }))
-            //     }
-            //     className="load-button"
-            //   >
-            //     Load Less
-            //   </button>
-            // )
             <></>
           )}
         </div>
@@ -179,8 +145,21 @@ function Transportation() {
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
+          {transportations
+            .filter(
+              (transportation) =>
+                transportation.name?.toLowerCase().includes("cab") ||
+                transportation.name?.toLowerCase().includes("cabs") ||
+                transportation.Name?.toLowerCase().includes("cab") ||
+                transportation.Name?.toLowerCase().includes("cabs")
+            ).length === 0 && <p>No Vehicle Cab Services to be Displayed</p> }
           {transportations
             .filter(
               (transportation) =>
@@ -202,31 +181,8 @@ function Transportation() {
               transportation.name?.toLowerCase().includes("cab") ||
               transportation.Name?.toLowerCase().includes("cab")
           ).length > initialCardCount && !showMore.cab ? (
-            <div className="load-more-btn-wrapper">
-              {/* <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, cab: true }))
-                }
-                className="load-button"
-              >
-                Load More (
-                {transportations.filter((transportation) =>
-                  transportation.name?.toLowerCase().includes("cab")
-                ).length - initialCardCount}{" "}
-                more)
-              </button> */}
-            </div>
+            <div className="load-more-btn-wrapper"></div>
           ) : (
-            // showMore.cab && (
-            //   <button
-            //     onClick={() =>
-            //       setShowMore((prevState) => ({ ...prevState, cab: false }))
-            //     }
-            //     className="load-button"
-            //   >
-            //     Load Less
-            //   </button>
-            // )
             <></>
           )}
         </div>
@@ -237,8 +193,23 @@ function Transportation() {
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
+          {transportations
+            .filter(
+              (transportation) =>
+                !(
+                  transportation.name?.toLowerCase().includes("rent") ||
+                  transportation.name?.toLowerCase().includes("cab") ||
+                  transportation.Name?.toLowerCase().includes("rent") ||
+                  transportation.Name?.toLowerCase().includes("cab")
+                )
+            ).length === 0 && <p>No Other Transportation to be Displayed</p>}
           {transportations
             .filter(
               (transportation) =>
@@ -267,36 +238,10 @@ function Transportation() {
               )
           ).length > initialCardCount && !showMore.other ? (
             <div className="load-more-btn-wrapper">
-              {/* <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, other: true }))
-                }
-                className="load-button"
-              >
-                Load More (
-                {transportations.filter(
-                  (transportation) =>
-                    !(
-                      transportation.name?.toLowerCase().includes("rent") ||
-                      transportation.name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("rent") ||
-                      transportation.Name?.toLowerCase().includes("cab")
-                    )
-                ).length - initialCardCount}{" "}
-                more)
-              </button> */}
+              
             </div>
           ) : (
-            // showMore.other && (
-            //   <button
-            //     onClick={() =>
-            //       setShowMore((prevState) => ({ ...prevState, other: false }))
-            //     }
-            //     className="load-button"
-            //   >
-            //     Load Less
-            //   </button>
-            // )
-            <></>
+           <></>
           )}
         </div>
       </div>

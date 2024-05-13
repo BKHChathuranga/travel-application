@@ -4,13 +4,28 @@ import Car from "../assets/car.png";
 import Hotel from "../assets/hotel.png";
 import Walking from "../assets/walking.png";
 import defaultTransportImage from "../assets/traveldefault.jpg";
-import defaultRentImage from "../assets/rentdefaultimage.png"
-import defaultCabImage from "../assets/cabsdefault.jpg"
-import defaultAccommodationImage from '../assets/otherdefaultaccommodation.jpg'
-import restDefault from "../assets/restdefault.jpg"
-import villaDefault from "../assets/villadefaukt.jpg"
+import defaultRentImage from "../assets/rentdefaultimage.png";
+import defaultCabImage from "../assets/cabsdefault.jpg";
+import defaultAccommodationImage from "../assets/otherdefaultaccommodation.jpg";
+import restDefault from "../assets/restdefault.jpg";
+import villaDefault from "../assets/villadefaukt.jpg";
+import hospitalDefault from "../assets/hospitalDefault.jpg";
+import policeDefault from "../assets/policeDefault.jpg";
+import { reviews } from "../constants/reviews";
+
 function Card({ data, type, feature }) {
-  console.log(data)
+  function getDestinationReviews(destinationName) {
+    console.log(destinationName);
+    // Check if the destination name exists in the reviews object
+    if (reviews.hasOwnProperty(destinationName)) {
+      // Return the first three reviews for the destination
+      return reviews[destinationName].slice(0, 3);
+    } else {
+      // If the destination name is not found, return an empty array
+      return [];
+    }
+  }
+
   const capitalizeAddress = (address) => {
     const words = address?.split(" ");
 
@@ -24,22 +39,19 @@ function Card({ data, type, feature }) {
   const getImageForDestination = (destination) => {
     try {
       // Dynamically import all images in the assets directory
-      const images = require.context(
-        "../assets",
-        false,
-        /\.(jpg)$/
-      );
-  
+      const images = require.context("../assets", false, /\.(jpg)$/);
+
       // Find the image file name that includes the destination name
-      const matchingImage = images.keys().find((image) =>
-        image.toLowerCase().includes(destination.toLowerCase())
-      );
-  
+      const matchingImage = images
+        .keys()
+        .find((image) =>
+          image.toLowerCase().includes(destination.toLowerCase())
+        );
+
       if (matchingImage) {
-        console.log(matchingImage)
         return images(matchingImage);
       }
-  
+
       // If no matching image is found, return a default image
       return require("../assets/defaultdestination.jpeg");
     } catch (error) {
@@ -53,7 +65,8 @@ function Card({ data, type, feature }) {
       {type === "transportation" && (
         <div className="card">
           <div className="card-header">
-            <img className="image-style" 
+            <img
+              className="image-style"
               src={
                 feature === "other"
                   ? defaultTransportImage
@@ -63,7 +76,6 @@ function Card({ data, type, feature }) {
                   ? defaultRentImage
                   : null
               }
-              
             />
           </div>
           <div className="title-rating">
@@ -93,7 +105,8 @@ function Card({ data, type, feature }) {
       {type === "accommodation" && (
         <div className="card">
           <div className="card-header">
-          <img className="image-style" 
+            <img
+              className="image-style"
               src={
                 feature === "other"
                   ? defaultAccommodationImage
@@ -142,7 +155,15 @@ function Card({ data, type, feature }) {
       {type === "destination" && (
         <div className="card">
           <div className="card-header">
-            <img src={getImageForDestination(data.Destination)} alt="" className="image-style" />
+            <img
+              src={
+                data.Destination
+                  ? getImageForDestination(data.Destination)
+                  : getImageForDestination(data.name)
+              }
+              alt=""
+              className="image-style"
+            />
           </div>
           <div className="title-rating">
             <h2>
@@ -162,6 +183,37 @@ function Card({ data, type, feature }) {
               {data.District}
               {data.district}
             </p>
+            <p style={{fontWeight:"bold"}}>
+              Reviews
+            </p>
+            <div
+              className="card-guidlines"
+              style={{
+                paddingLeft: "7px",
+                maxHeight: "200px",
+                overflow: "scroll",
+                overflowX: "hidden",
+              }}
+            >
+              <ul style={{ listStyleType: "disc" }}>
+                {data.Destination
+                  ? getDestinationReviews(data.Destination).map(
+                      (item, index) => (
+                        <li
+                          key={index}
+                          style={{ display: "list-item"}}
+                        >
+                          &#8226;{item}
+                        </li>
+                      )
+                    )
+                  : getDestinationReviews(data.name).map((item, index) => (
+                      <li key={index} style={{ display: "list-item" }}>
+                        &#8226; {item}
+                      </li>
+                    ))}
+              </ul>
+            </div>
           </div>
           <div className="card-body">
             <div className="image-group">
@@ -178,6 +230,51 @@ function Card({ data, type, feature }) {
             </div>
           </div>
           <div className="price-card"></div>
+        </div>
+      )}
+      {type === "hospital" && (
+        <div className="card">
+          <div className="card-header">
+            <img className="image-style" src={hospitalDefault} />
+          </div>
+          <div className="title-rating">
+            <h2>
+              {data.Name} {data.name}
+            </h2>
+          </div>
+          <div className="card-middle">
+            <p>
+              {data.District}
+              {data.district}
+            </p>
+          </div>
+          <div className="card-guidlines">
+            <ul>
+              <li>Contact: {data.contact}</li>
+            </ul>
+          </div>
+          <div className="price-card">{data.price}</div>
+        </div>
+      )}
+      {type === "police" && (
+        <div className="card">
+          <div className="card-header">
+            <img className="image-style" src={policeDefault} />
+          </div>
+          <div className="title-rating">
+            <h2>{data.police_station} Police Station</h2>
+          </div>
+
+          <div className="card-guidlines">
+            <ul>
+              <li>Province :{data.province}</li>
+              <li>Division: {data.division}</li>
+            </ul>
+            <ul>
+              <li>Contact: {data.contact}</li>
+            </ul>
+          </div>
+          <div className="price-card">{data.price}</div>
         </div>
       )}
     </>

@@ -18,7 +18,7 @@ class TravelGuide():
         self.transportation_manager = TransportationManager()
 
         # print(self.location_manager.categories)
-        self.location_manager.setCategory("Beach paradise")
+        # self.location_manager.setCategory("Beach paradise")
     
     def setDestinationCategory(self, cat):
         self.location_manager.setCategory(cat)

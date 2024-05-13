@@ -94,7 +94,7 @@ class UpdateIsUsingRecommendations(APIView):
     serializer = UserSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class GetUserDetails(APIView):
   permission_classes = (permissions.AllowAny,)
   

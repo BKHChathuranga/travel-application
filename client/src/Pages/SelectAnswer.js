@@ -15,7 +15,7 @@ function SelectAnswer() {
   };
   const handleNext = async () => {
     try {
-      const accoTypes = await getAccommodations({ location: selectedAnswer });
+      const accoTypes = await getAccommodations({ location: selectedAnswer, category:localStorage.getItem('firstAnswer')});
       if (accoTypes.status === 200) {
         navigate("/accomdanswer", { state: { answer: accoTypes.data, location:selectedAnswer } });
       }

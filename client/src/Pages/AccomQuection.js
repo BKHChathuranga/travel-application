@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import Loginart from "../assets/Loginart.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getRecommendations, updateUserPreference, updateUserUsingRecommendations } from "../api/api";
+import {
+  getRecommendations,
+  updateUserPreference,
+  updateUserUsingRecommendations,
+} from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
 import { useRecommendation } from "../contexts/RecommendationContext";
 
@@ -14,9 +18,9 @@ function AccomQuection() {
   const answer = location?.state.answer; // Get the selected answer from the previous page
   const selectedLocation = location?.state.location;
   const [selectedAnswer, setSelectedAnswer] = useState("");
-
+  const first = localStorage.getItem("firstAnswer");
   const handleSelectAnswer = (event) => {
-    console.log(event.target.value)
+    console.log(event.target.value);
     setSelectedAnswer(event.target.value); // Update the selected answer
   };
 
@@ -24,8 +28,9 @@ function AccomQuection() {
     try {
       // Send both selected answers to the backend via an API call
       const response = await getRecommendations({
-        category: selectedAnswer,
-        location: selectedLocation,
+        first: first,
+        third: selectedAnswer,
+        second: selectedLocation,
       });
 
       if (response.status === 200) {
@@ -35,8 +40,16 @@ function AccomQuection() {
         localStorage.setItem("thirdAnswer", selectedAnswer);
         setSecondAnswer(answer);
         setThirdAnswer(selectedAnswer);
-        await updateUserPreference({email:localStorage.getItem("userEmail"),first_answer:localStorage.getItem("firstAnswer"),second_answer:selectedLocation,third_answer:selectedAnswer})
-        await updateUserUsingRecommendations({email:localStorage.getItem("userEmail"),is_using_recommendation:true})
+        await updateUserPreference({
+          email: localStorage.getItem("userEmail"),
+          first_answer: localStorage.getItem("firstAnswer"),
+          second_answer: selectedLocation,
+          third_answer: selectedAnswer,
+        });
+        await updateUserUsingRecommendations({
+          email: localStorage.getItem("userEmail"),
+          is_using_recommendation: true,
+        });
         navigate("/");
       }
       console.log("Answers sent successfully:");
@@ -63,9 +76,7 @@ function AccomQuection() {
                       type="radio"
                       name={answer}
                       value={answer}
-                      checked={
-                        selectedAnswer === answer
-                      }
+                      checked={selectedAnswer === answer}
                       onChange={handleSelectAnswer}
                     />
                     <label>{answer}</label>
