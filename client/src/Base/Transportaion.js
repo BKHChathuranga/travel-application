@@ -96,7 +96,7 @@ function Transportation() {
           Search
         </button>
       </form>
-      <div className="location-card-container">
+      {/* <div className="location-card-container">
         {[...Array(cardCount)].map((_, index) => (
           <Card key={index} data={{}} type="transportation" />
         ))}
@@ -111,24 +111,24 @@ function Transportation() {
             Load Less
           </button>
         )}
-      </div>
+      </div> */}
 
       {/* Vehicle Renting */}
       <h4 className="sub-title-one">Vehicle Renting</h4>
       <div className="own-card-area">
-        <div className="own-cards-area">
+        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
           {transportations
             .filter((transportation) =>
               transportation.name?.toLowerCase().includes("rent") || transportation.Name?.toLowerCase().includes("rent")
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" />
+              <Card key={index} data={transportation} type="transportation" feature="rent"/>
             ))}
           {transportations.filter((transportation) =>
             transportation.name?.toLowerCase().includes("rent") ||  transportation.Name?.toLowerCase().includes("rent")
           ).length > initialCardCount && !showMore.renting ? (
             <div className="load-more-btn-wrapper">
-              <button
+              {/* <button
                 onClick={() =>
                   setShowMore((prevState) => ({ ...prevState, renting: true }))
                 }
@@ -139,19 +139,20 @@ function Transportation() {
                   transportation.name?.toLowerCase().includes("rent") || transportation.Name?.toLowerCase().includes("rent")
                 ).length - initialCardCount}{" "}
                 more)
-              </button>
+              </button> */}
             </div>
           ) : (
-            showMore.renting && (
-              <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, renting: false }))
-                }
-                className="load-button"
-              >
-                Load Less
-              </button>
-            )
+            // showMore.renting && (
+            //   <button
+            //     onClick={() =>
+            //       setShowMore((prevState) => ({ ...prevState, renting: false }))
+            //     }
+            //     className="load-button"
+            //   >
+            //     Load Less
+            //   </button>
+            // )
+            <></>
           )}
         </div>
       </div>
@@ -159,19 +160,19 @@ function Transportation() {
       {/* Cab Services */}
       <h4 className="sub-title-one">Cab Services</h4>
       <div className="own-card-area">
-        <div className="own-cards-area">
+        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
           {transportations
             .filter((transportation) =>
               transportation.name?.toLowerCase().includes("cab") || transportation.name?.toLowerCase().includes("cabs") || transportation.Name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("cabs")
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" />
+              <Card key={index} data={transportation} type="transportation" feature="cab"/>
             ))}
           {transportations.filter((transportation) =>
             transportation.name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("cab")
           ).length > initialCardCount && !showMore.cab ? (
             <div className="load-more-btn-wrapper">
-              <button
+              {/* <button
                 onClick={() =>
                   setShowMore((prevState) => ({ ...prevState, cab: true }))
                 }
@@ -182,19 +183,20 @@ function Transportation() {
                   transportation.name?.toLowerCase().includes("cab")
                 ).length - initialCardCount}{" "}
                 more)
-              </button>
+              </button> */}
             </div>
           ) : (
-            showMore.cab && (
-              <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, cab: false }))
-                }
-                className="load-button"
-              >
-                Load Less
-              </button>
-            )
+            // showMore.cab && (
+            //   <button
+            //     onClick={() =>
+            //       setShowMore((prevState) => ({ ...prevState, cab: false }))
+            //     }
+            //     className="load-button"
+            //   >
+            //     Load Less
+            //   </button>
+            // )
+            <></>
           )}
         </div>
       </div>
@@ -202,7 +204,7 @@ function Transportation() {
       {/* Other Transportation */}
       <h4 className="sub-title-one">Other Transportation</h4>
       <div className="own-card-area">
-        <div className="own-cards-area">
+        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
           {transportations
             .filter(
               (transportation) =>
@@ -213,7 +215,7 @@ function Transportation() {
                 )
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" />
+              <Card key={index} data={transportation} type="transportation" feature="other"/>
             ))}
           {transportations.filter(
             (transportation) =>
@@ -224,7 +226,7 @@ function Transportation() {
               )
           ).length > initialCardCount && !showMore.other ? (
             <div className="load-more-btn-wrapper">
-              <button
+              {/* <button
                 onClick={() =>
                   setShowMore((prevState) => ({ ...prevState, other: true }))
                 }
@@ -240,19 +242,20 @@ function Transportation() {
                     )
                 ).length - initialCardCount}{" "}
                 more)
-              </button>
+              </button> */}
             </div>
           ) : (
-            showMore.other && (
-              <button
-                onClick={() =>
-                  setShowMore((prevState) => ({ ...prevState, other: false }))
-                }
-                className="load-button"
-              >
-                Load Less
-              </button>
-            )
+            // showMore.other && (
+            //   <button
+            //     onClick={() =>
+            //       setShowMore((prevState) => ({ ...prevState, other: false }))
+            //     }
+            //     className="load-button"
+            //   >
+            //     Load Less
+            //   </button>
+            // )
+            <></>
           )}
         </div>
       </div>

@@ -3,8 +3,13 @@ import image1 from "../assets/b-img-2.jpg";
 import Car from "../assets/car.png";
 import Hotel from "../assets/hotel.png";
 import Walking from "../assets/walking.png";
-
-function Card({ data, type }) {
+import defaultTransportImage from "../assets/traveldefault.jpg";
+import defaultRentImage from "../assets/rentdefaultimage.png"
+import defaultCabImage from "../assets/cabsdefault.jpg"
+import defaultAccommodationImage from '../assets/otherdefaultaccommodation.jpg'
+import restDefault from "../assets/restdefault.jpg"
+import villaDefault from "../assets/villadefaukt.jpg"
+function Card({ data, type, feature }) {
   const capitalizeAddress = (address) => {
     const words = address?.split(" ");
 
@@ -21,16 +26,22 @@ function Card({ data, type }) {
       const folders = require.context("../assets", true).keys();
 
       // Find the folder name containing a word related to the destination
-      const matchingFolder = folders.find(folder => folder.toLowerCase().includes(destination.toLowerCase()));
+      const matchingFolder = folders.find((folder) =>
+        folder.toLowerCase().includes(destination.toLowerCase())
+      );
 
       if (matchingFolder) {
         // Get the last part of the folder path (folder name)
-        const folderName = matchingFolder.split('/').slice(-1)[0];
+        const folderName = matchingFolder.split("/").slice(-1)[0];
 
         // Dynamically import the first image in the matching folder
-        const images = require.context(`../assets/${folderName}`, false, /\.(png|jpe?g|jfif|svg)$/);
-        const firstImage = images.keys().find(image => true);
-        
+        const images = require.context(
+          `../assets/${folderName}`,
+          false,
+          /\.(png|jpe?g|jfif|svg)$/
+        );
+        const firstImage = images.keys().find((image) => true);
+
         if (firstImage) {
           return images(firstImage);
         }
@@ -48,17 +59,32 @@ function Card({ data, type }) {
       {type === "transportation" && (
         <div className="card">
           <div className="card-header">
-            <img src={image1} />
+            <img
+              src={
+                feature === "other"
+                  ? defaultTransportImage
+                  : feature === "cab"
+                  ? defaultCabImage
+                  : feature === "rent"
+                  ? defaultRentImage
+                  : null
+              }
+            />
           </div>
           <div className="title-rating">
-            <h2>{data.Name} {data.name}</h2>
+            <h2>
+              {data.Name} {data.name}
+            </h2>
             <div className="rating">
               <span className="star">&#9733;</span>
               <p className="rating-number">{(Math.random() * 5).toFixed(1)}</p>
             </div>
           </div>
           <div className="card-middle">
-            <p>{data.District}{data.district}</p>
+            <p>
+              {data.District}
+              {data.district}
+            </p>
           </div>
           <div className="card-guidlines">
             <ul>
@@ -72,22 +98,44 @@ function Card({ data, type }) {
       {type === "accommodation" && (
         <div className="card">
           <div className="card-header">
-            <img src={image1} />
+          <img
+              src={
+                feature === "other"
+                  ? defaultAccommodationImage
+                  : feature === "rest"
+                  ? restDefault
+                  : feature === "villa"
+                  ? villaDefault
+                  : null
+              }
+            />
           </div>
           <div className="title-rating">
-            <h2>{data.Name}{data.name}</h2>
+            <h2>
+              {data.Name}
+              {data.name}
+            </h2>
             <div className="rating">
               <span className="star">&#9733;</span>
-              <p className="rating-number">{data.Grade?.toLowerCase()}{data.grade?.toLowerCase()}</p>
+              <p className="rating-number">
+                {data.Grade?.toLowerCase()}
+                {data.grade?.toLowerCase()}
+              </p>
             </div>
           </div>
           <div className="card-middle">
-            <p>{data.District}{data.district}</p>
+            <p>
+              {data.District}
+              {data.district}
+            </p>
           </div>
 
           <div className="card-guidlines">
             <ul>
-              <li>Address: {capitalizeAddress(data.Address?.toLowerCase())}{capitalizeAddress(data.address?.toLowerCase())}</li>
+              <li>
+                Address: {capitalizeAddress(data.Address?.toLowerCase())}
+                {capitalizeAddress(data.address?.toLowerCase())}
+              </li>
             </ul>
           </div>
           <div className="price-card">
@@ -99,18 +147,25 @@ function Card({ data, type }) {
       {type === "destination" && (
         <div className="card">
           <div className="card-header">
-          <img src={getImageForDestination(data.Destination)} alt="" />
+            <img src={getImageForDestination(data.Destination)} alt="" />
           </div>
           <div className="title-rating">
-            <h2>{data.Destination} {data.name}</h2>
+            <h2>
+              {data.Destination} {data.name}
+            </h2>
             <div className="rating">
               <span className="star">&#9733;</span>
-              <p className="rating-number">{data.Rating}{data.rating}</p>
+              <p className="rating-number">
+                {data.Rating}
+                {data.rating}
+              </p>
             </div>
           </div>
           <div className="card-middle">
             <p>
-              {data["Destination Type"]} {data["destination_type"]} - {data.District}{data.district}
+              {data["Destination Type"]} {data["destination_type"]} -{" "}
+              {data.District}
+              {data.district}
             </p>
           </div>
           <div className="card-body">

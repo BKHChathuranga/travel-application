@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Backimgone from '../assets/b-img-2.jpg'
+import '../App.css'
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ function Contact() {
     email: '',
     message: ''
   });
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -25,7 +28,14 @@ function Contact() {
       email: '',
       message: ''
     });
+    // Show success message
+    setShowSuccessMessage(true);
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
   };
+
   return (
     <div>
 
@@ -72,6 +82,14 @@ function Contact() {
           </form>
         </div>
       </div>
+
+      {/* Success Message Popup */}
+      {showSuccessMessage && (
+        <div className="success-popup2">
+          <p>Your message was sent successfully!</p>
+        </div>
+      )}
+
     </div>
   )
 }

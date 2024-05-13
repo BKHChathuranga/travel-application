@@ -38,3 +38,22 @@
 }
 
 
+.success-popup2 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #4caf50; /* Green background color */
+  color: white; /* White text color */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+  z-index: 1000; /* Ensure it appears on top of other elements */
+}
+
+.success-popup2 p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* You can add more styles as needed */

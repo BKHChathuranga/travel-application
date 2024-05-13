@@ -119,6 +119,7 @@ function Home() {
                       key={index}
                       data={transportation}
                       type="transportation"
+                      feature="other"
                     />
                   ))}
             </div>
@@ -143,7 +144,7 @@ function Home() {
               accommodations
                 ?.slice(0, visibleCards)
                 ?.map((accommodation, index) => (
-                  <Card key={index} data={accommodation} type="accommodation" />
+                  <Card key={index} data={accommodation} type="accommodation" feature="other"/>
                 ))}
           </div>
           <div className="Button-view-all">
