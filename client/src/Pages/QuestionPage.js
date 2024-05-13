@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import Loginart from "../assets/Loginart.png";
 import { Link, useNavigate } from "react-router-dom";
 import { getDestinations } from "../api/api";
+import { useRecommendation } from "../contexts/RecommendationContext";
 
 function QuestionPage() {
+  const { setFirstAnswer } = useRecommendation();
   const navigate = useNavigate();
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const handleNext = async () => {
     try {
       // Send the selected answer to the backend via an API call
-      const response = await getDestinations({category:selectedAnswer});
+      const response = await getDestinations({ category: selectedAnswer });
       console.log("Answer sent successfully:", response);
-
+      setFirstAnswer(selectedAnswer);
+      localStorage.setItem("firstAnswer", selectedAnswer);
       // Redirect to the selectanswer page and pass the answers in the state
       navigate("/selectanswer", { state: { answers: response.data } });
     } catch (error) {

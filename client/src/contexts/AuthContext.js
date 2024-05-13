@@ -19,13 +19,22 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
 
-    loadUser();
+    const storedEmail = localStorage.getItem("userEmail");
+   
+    setIsUsingRecommendation(localStorage.getItem("isUsingRecommendation"));
+    if (storedEmail) {
+      setUser({ email: storedEmail});
+    } else {
+      loadUser();
+    }
   }, []);
 
   const signIn = async (email, password) => {
     try {
       const userData = await login({ email, password });
       setUser(userData);
+      localStorage.setItem("userEmail", userData.data.email);
+      
       return userData;
     } catch (error) {
       throw new Error("Invalid email or password");
@@ -36,6 +45,10 @@ export const AuthProvider = ({ children }) => {
     try {
       await logout();
       setUser(null);
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("username");
+      localStorage.removeItem("isUsingRecommendation");
+      setIsUsingRecommendation(false)
     } catch (error) {
       console.error("Error logging out:", error);
     }

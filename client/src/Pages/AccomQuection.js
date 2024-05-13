@@ -6,7 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useRecommendation } from "../contexts/RecommendationContext";
 
 function AccomQuection() {
-  const { updateRecommendations } = useRecommendation();
+  const { updateRecommendations, setSecondAnswer, setThirdAnswer } =
+    useRecommendation();
   const location = useLocation();
   const navigate = useNavigate();
   const { setIsUsingRecommendation } = useAuth();
@@ -18,7 +19,6 @@ function AccomQuection() {
   };
 
   const handleNext = async () => {
-
     try {
       // Send both selected answers to the backend via an API call
       const response = await getRecommendations({
@@ -29,6 +29,10 @@ function AccomQuection() {
       if (response.status === 200) {
         updateRecommendations(response.data);
         setIsUsingRecommendation(true);
+        localStorage.setItem("secondAnswer", answer);
+        localStorage.setItem("thirdAnswer", selectedAnswer);
+        setSecondAnswer(answer);
+        setThirdAnswer(selectedAnswer);
         navigate("/");
       }
       console.log("Answers sent successfully:");
@@ -94,6 +98,18 @@ function AccomQuection() {
                     onChange={handleSelectAnswer}
                   />
                   <label>5-star Hostels</label>
+                </div>
+              </div>
+              <div className="field">
+                <div className="ui radio checkbox quection-check">
+                  <input
+                    type="radio"
+                    name="accommodation"
+                    value="Bangalows"
+                    checked={selectedAnswer === "Bangalows"}
+                    onChange={handleSelectAnswer}
+                  />
+                  <label>Bungalows</label>
                 </div>
               </div>
               <button onClick={handleNext} className="submit-que">

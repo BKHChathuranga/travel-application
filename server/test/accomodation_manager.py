@@ -58,5 +58,8 @@ class AccomodationManager():
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         r = 6371  # Radius of earth in kilometers. Use 3956 for miles
         distance = r * c
-
+    
         return distance
+    
+    def getAccomodationTypes(self):
+        return self.df_accomodations[self.df_accomodations.District == self.district].Type.unique()

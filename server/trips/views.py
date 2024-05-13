@@ -118,6 +118,7 @@ def set_accommodation_category(request):
         guide.setAccomodationCategory(category)
         picked, recommended = guide.getRecommendedLocations()
         accommodations = guide.getRecommendedAccomodations()
+        print(accommodations)
         hospitals = guide.getRecommendedHospitals()
         police_stations = guide.getRecommendedPoliceStations()
         transportation = guide.getRecommendedTransportations()

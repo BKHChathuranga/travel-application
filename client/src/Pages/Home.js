@@ -9,56 +9,73 @@ import Transportation from "../Base/Transportaion";
 import Backimgone from "../assets/b-img-1.jpg";
 import Top from "../Components/Top";
 import {
+  getDestinations,
   getRandomAccommodations,
   getRandomDestinations,
   getRandomTransportation,
+  getRecommendations,
 } from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
 import { useRecommendation } from "../contexts/RecommendationContext";
 function Home() {
-  const { isUsingRecommendation } = useAuth();
-  const { recommendations } = useRecommendation();
   const [destinations, setDestinations] = useState([]);
   const [accommodations, setAccommodations] = useState([]);
   const [transportations, setTransportations] = useState([]);
 
   const [visibleCards, setVisibleCards] = useState(3); // State to manage the number of visible cards
-  const totalCards = 4; // Total number of cards available
-  console.log(recommendations, "reco");
+
   useEffect(() => {
-    // Fetch destinations
-    if (!isUsingRecommendation) {
-      getRandomDestinations()
-        .then((response) => {
-          setDestinations(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching destinations:", error);
-        });
+    const fetchRecommendations = async () => {
+      if (!localStorage.getItem("isUsingRecommendation")) {
+        getRandomDestinations()
+          .then((response) => {
+            setDestinations(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching destinations:", error);
+          });
 
-      // Fetch accommodations
-      getRandomAccommodations()
-        .then((response) => {
-          setAccommodations(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching accommodations:", error);
-        });
+        // Fetch accommodations
+        getRandomAccommodations()
+          .then((response) => {
+            setAccommodations(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching accommodations:", error);
+          });
 
-      // Fetch transportation
-      getRandomTransportation()
-        .then((response) => {
-          setTransportations(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching transportation:", error);
-        });
-    } else {
-      setDestinations(recommendations.destinations);
-      setAccommodations(recommendations.accommodations);
-      setTransportations(recommendations.transportation);
-    }
-  }, [isUsingRecommendation]);
+        // Fetch transportation
+        getRandomTransportation()
+          .then((response) => {
+            setTransportations(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching transportation:", error);
+          });
+      } else {
+        
+        try {
+          const destinationsResponse = await getDestinations({
+            category: localStorage.getItem("firstAnswer"),
+          });
+          const recommendationsResponse = await getRecommendations({
+            category: localStorage.getItem("thirdAnswer"),
+            location: localStorage.getItem("secondAnswer"),
+          });
+          if (recommendationsResponse.status === 200) {
+            console.log(recommendationsResponse.data.accommodations, "reco");
+            setDestinations(recommendationsResponse.data.destinations);
+            setAccommodations(recommendationsResponse.data.accommodations);
+            setTransportations(recommendationsResponse.data.transportation);
+          }
+        } catch (error) {
+          console.error("Error fetching recommendations:", error);
+        }
+      }
+    };
+
+    fetchRecommendations();
+  }, [localStorage.getItem("isUsingRecommendation")]);
 
   // Transportation page
   const handleViewAllClickTrans = () => {
@@ -94,18 +111,19 @@ function Home() {
           <div className="title-trans">
             <h1>Transportation</h1>
             <div className="card-items-trans">
-              {transportations
-                .slice(0, visibleCards)
-                .map((transportation, index) => (
-                  <Card
-                    key={index}
-                    data={transportation}
-                    type="transportation"
-                  />
-                ))}
+              {transportations &&
+                transportations
+                  ?.slice(0, visibleCards)
+                  ?.map((transportation, index) => (
+                    <Card
+                      key={index}
+                      data={transportation}
+                      type="transportation"
+                    />
+                  ))}
             </div>
             <div className="Button-view-all">
-              {visibleCards < transportations.length ? (
+              {visibleCards < transportations?.length ? (
                 <button
                   className="view-all-trans"
                   onClick={handleViewAllClickTrans}
@@ -121,14 +139,15 @@ function Home() {
             <h1>Accommodation</h1>
           </div>
           <div className="card-items-trans">
-            {accommodations
-              .slice(0, visibleCards)
-              .map((accommodation, index) => (
-                <Card key={index} data={accommodation} type="accommodation" />
-              ))}
+            {accommodations &&
+              accommodations
+                ?.slice(0, visibleCards)
+                ?.map((accommodation, index) => (
+                  <Card key={index} data={accommodation} type="accommodation" />
+                ))}
           </div>
           <div className="Button-view-all">
-            {visibleCards < accommodations.length ? (
+            {visibleCards < accommodations?.length ? (
               <button
                 className="view-all-trans"
                 onClick={handleViewAllClickAcco}
@@ -143,12 +162,12 @@ function Home() {
             <h1>Destinations</h1>
           </div>
           <div className="card-items-trans">
-            {destinations.slice(0, visibleCards).map((destination, index) => (
+            {destinations && destinations?.slice(0, visibleCards)?.map((destination, index) => (
               <Card key={index} data={destination} type="destination" />
             ))}
           </div>
           <div className="Button-view-all">
-            {visibleCards < destinations.length ? (
+            {visibleCards < destinations?.length ? (
               <button
                 className="view-all-trans"
                 onClick={handleViewAllClickDest}

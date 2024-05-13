@@ -47,6 +47,8 @@ class TravelGuide():
 
     def getRecommendedTransportations(self):
         return self.transportation_manager.getTransportations(self.category_location)
+    def getAvailableAccomodationTypes(self):
+        return guide.accomodation_manager.getAccomodationTypes()
         
 if __name__ == "__main__":
     guide = TravelGuide()
@@ -54,7 +56,8 @@ if __name__ == "__main__":
     # print(guide.getCategoryLocations())
     guide.setCategoryLocation("Unawatuna Beach")
     picked, recommended = guide.getRecommendedLocations()
-
+    #edited 9.45
+    available_accomodation_types = guide.getAvailableAccomodationTypes()
     guide.setAccomodationCategory("Bangalows")
     accomodations = guide.getRecommendedAccomodations()
     hospitals = guide.getRecommendedHospitals()
