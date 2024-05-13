@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loginart from "../assets/Loginart.png";
-import { Link, useLocation,useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getAccommodations } from "../api/api";
 
 function SelectAnswer() {
   const location = useLocation();
@@ -9,13 +10,19 @@ function SelectAnswer() {
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const handleSelectAnswer = (event) => {
-    console.log('selected', event.target.value)
+    console.log("selected", event.target.value);
     setSelectedAnswer(event.target.value); // Update the selected answer when an option is selected
   };
-  const handleNext = () => {
-    navigate("/accomdanswer", { state: { answer: selectedAnswer } });
+  const handleNext = async () => {
+    try {
+      const accoTypes = await getAccommodations({ location: selectedAnswer });
+      if (accoTypes.status === 200) {
+        navigate("/accomdanswer", { state: { answer: accoTypes.data, location:selectedAnswer } });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-
 
   return (
     <div className="quection-wrapper">
@@ -45,7 +52,7 @@ function SelectAnswer() {
                     </div>
                   </div>
                 ))}
-             <button onClick={handleNext} className="submit-que">
+              <button onClick={handleNext} className="submit-que">
                 Next
               </button>
             </div>

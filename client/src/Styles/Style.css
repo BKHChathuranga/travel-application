@@ -159,7 +159,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin: 20px;
-  max-width: 400px;
+  max-width: 300px;
   min-width: 300px;
   cursor: pointer;
 }
@@ -169,6 +169,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  height:200px
 }
 
 .card-header img {
@@ -216,6 +217,8 @@
 .card-middle {
   margin-top: -40px;
   margin-bottom: 30px;
+  justify-content:start ;
+  text-align: start;
 }
 
 .card-body {
@@ -602,6 +605,7 @@ a:hover {
 
 .sub-title-one {
   align-items: center;
+  text-align: start;
   margin-left: 80px;
   font-size: 27px;
   font-weight: 600;
@@ -875,4 +879,12 @@ a:hover {
 
 .modal-content button:last-child {
   margin-right: 0;
+}
+
+.image-style{
+  object-fit: cover;
+  width:100%;
+  height:100%;
+  max-width: 200px;
+  max-height: 200px;
 }

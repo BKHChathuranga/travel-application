@@ -10,6 +10,7 @@ import defaultAccommodationImage from '../assets/otherdefaultaccommodation.jpg'
 import restDefault from "../assets/restdefault.jpg"
 import villaDefault from "../assets/villadefaukt.jpg"
 function Card({ data, type, feature }) {
+  console.log(data)
   const capitalizeAddress = (address) => {
     const words = address?.split(" ");
 
@@ -22,44 +23,37 @@ function Card({ data, type, feature }) {
 
   const getImageForDestination = (destination) => {
     try {
-      // Get all folder names in the assets directory
-      const folders = require.context("../assets", true).keys();
-
-      // Find the folder name containing a word related to the destination
-      const matchingFolder = folders.find((folder) =>
-        folder.toLowerCase().includes(destination.toLowerCase())
+      // Dynamically import all images in the assets directory
+      const images = require.context(
+        "../assets",
+        false,
+        /\.(jpg)$/
       );
-
-      if (matchingFolder) {
-        // Get the last part of the folder path (folder name)
-        const folderName = matchingFolder.split("/").slice(-1)[0];
-
-        // Dynamically import the first image in the matching folder
-        const images = require.context(
-          `../assets/${folderName}`,
-          false,
-          /\.(png|jpe?g|jfif|svg)$/
-        );
-        const firstImage = images.keys().find((image) => true);
-
-        if (firstImage) {
-          return images(firstImage);
-        }
+  
+      // Find the image file name that includes the destination name
+      const matchingImage = images.keys().find((image) =>
+        image.toLowerCase().includes(destination.toLowerCase())
+      );
+  
+      if (matchingImage) {
+        console.log(matchingImage)
+        return images(matchingImage);
       }
-
-      // If no matching folder or image is found, return a default image
+  
+      // If no matching image is found, return a default image
       return require("../assets/defaultdestination.jpeg");
     } catch (error) {
       // If any error occurs, return a default image
       return require("../assets/defaultdestination.jpeg");
     }
   };
+
   return (
     <>
       {type === "transportation" && (
         <div className="card">
           <div className="card-header">
-            <img
+            <img className="image-style" 
               src={
                 feature === "other"
                   ? defaultTransportImage
@@ -69,6 +63,7 @@ function Card({ data, type, feature }) {
                   ? defaultRentImage
                   : null
               }
+              
             />
           </div>
           <div className="title-rating">
@@ -98,7 +93,7 @@ function Card({ data, type, feature }) {
       {type === "accommodation" && (
         <div className="card">
           <div className="card-header">
-          <img
+          <img className="image-style" 
               src={
                 feature === "other"
                   ? defaultAccommodationImage
@@ -147,7 +142,7 @@ function Card({ data, type, feature }) {
       {type === "destination" && (
         <div className="card">
           <div className="card-header">
-            <img src={getImageForDestination(data.Destination)} alt="" />
+            <img src={getImageForDestination(data.Destination)} alt="" className="image-style" />
           </div>
           <div className="title-rating">
             <h2>

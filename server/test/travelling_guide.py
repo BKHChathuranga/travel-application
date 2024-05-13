@@ -48,7 +48,7 @@ class TravelGuide():
     def getRecommendedTransportations(self):
         return self.transportation_manager.getTransportations(self.category_location)
     def getAvailableAccomodationTypes(self):
-        return guide.accomodation_manager.getAccomodationTypes()
+        return self.accomodation_manager.getAccomodationTypes()
         
 if __name__ == "__main__":
     guide = TravelGuide()

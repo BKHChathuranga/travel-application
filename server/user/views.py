@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
 from .validations import custom_validation, validate_email, validate_password
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
@@ -49,3 +50,62 @@ class UserView(APIView):
 	def get(self, request):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+
+class UpdateUserAnswers(APIView):
+  permission_classes = (permissions.AllowAny,)
+
+  def put(self, request):
+        email = request.data.get('email')
+        first_answer = request.data.get('first_answer')
+        second_answer = request.data.get('second_answer')
+        third_answer = request.data.get('third_answer')
+
+        UserModel = get_user_model()
+        try:
+            user = UserModel.objects.get(email=email)
+        except UserModel.DoesNotExist:
+            raise NotFound("User not found.")
+
+        user.first_answer = first_answer
+        user.second_answer = second_answer
+        user.third_answer = third_answer
+        user.save()
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateIsUsingRecommendations(APIView):
+  permission_classes = (permissions.AllowAny,)
+
+  def put(self, request):
+    email = request.data.get('email')
+    isUsingRecommendation = request.data.get("is_using_recommendation")
+    
+    UserModel = get_user_model()
+    try:
+      user = UserModel.objects.get(email=email)
+    except UserModel.DoesNotExist:
+      raise NotFound("User not found.")
+
+    user.is_using_recommendations = isUsingRecommendation
+    user.save()
+
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class GetUserDetails(APIView):
+  permission_classes = (permissions.AllowAny,)
+  
+  def post(self, request):
+      email = request.data.get('email')
+      if email:
+          try:
+              user = get_user_model().objects.get(email=email)
+              serializer = UserSerializer(user)
+              return Response(serializer.data, status=status.HTTP_200_OK)
+          except get_user_model().DoesNotExist:
+              return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+      else:
+          return Response({"error": "Email not provided."}, status=status.HTTP_400_BAD_REQUEST)

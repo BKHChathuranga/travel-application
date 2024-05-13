@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Loginart from "../assets/Loginart.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getRecommendations } from "../api/api";
+import { getRecommendations, updateUserPreference, updateUserUsingRecommendations } from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
 import { useRecommendation } from "../contexts/RecommendationContext";
 
@@ -12,9 +12,11 @@ function AccomQuection() {
   const navigate = useNavigate();
   const { setIsUsingRecommendation } = useAuth();
   const answer = location?.state.answer; // Get the selected answer from the previous page
+  const selectedLocation = location?.state.location;
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const handleSelectAnswer = (event) => {
+    console.log(event.target.value)
     setSelectedAnswer(event.target.value); // Update the selected answer
   };
 
@@ -23,16 +25,18 @@ function AccomQuection() {
       // Send both selected answers to the backend via an API call
       const response = await getRecommendations({
         category: selectedAnswer,
-        location: answer,
+        location: selectedLocation,
       });
 
       if (response.status === 200) {
         updateRecommendations(response.data);
         setIsUsingRecommendation(true);
-        localStorage.setItem("secondAnswer", answer);
+        localStorage.setItem("secondAnswer", selectedLocation);
         localStorage.setItem("thirdAnswer", selectedAnswer);
         setSecondAnswer(answer);
         setThirdAnswer(selectedAnswer);
+        await updateUserPreference({email:localStorage.getItem("userEmail"),first_answer:localStorage.getItem("firstAnswer"),second_answer:selectedLocation,third_answer:selectedAnswer})
+        await updateUserUsingRecommendations({email:localStorage.getItem("userEmail"),is_using_recommendation:true})
         navigate("/");
       }
       console.log("Answers sent successfully:");
@@ -52,66 +56,22 @@ function AccomQuection() {
               <label className="quection" htmlFor="username">
                 3.What type of accommodation do you prefer ?
               </label>
-              <div className="field">
-                <div className="ui radio checkbox quection-check">
-                  <input
-                    type="radio"
-                    name="accommodation"
-                    value="Camping or Backpacker Hostels"
-                    checked={selectedAnswer === "Camping or Backpacker Hostels"}
-                    onChange={handleSelectAnswer}
-                  />
-                  <label>Camping or Backpacker Hostels</label>
+              {answer?.map((answer, index) => (
+                <div className="field">
+                  <div className="ui radio checkbox quection-check">
+                    <input
+                      type="radio"
+                      name={answer}
+                      value={answer}
+                      checked={
+                        selectedAnswer === answer
+                      }
+                      onChange={handleSelectAnswer}
+                    />
+                    <label>{answer}</label>
+                  </div>
                 </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox quection-check">
-                  <input
-                    type="radio"
-                    name="accommodation"
-                    value="Ecolodge"
-                    checked={selectedAnswer === "Ecolodge"}
-                    onChange={handleSelectAnswer}
-                  />
-                  <label>Ecolodge</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox quection-check">
-                  <input
-                    type="radio"
-                    name="accommodation"
-                    value="Vila"
-                    checked={selectedAnswer === "Vila"}
-                    onChange={handleSelectAnswer}
-                  />
-                  <label>Vila</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox quection-check">
-                  <input
-                    type="radio"
-                    name="accommodation"
-                    value="5-star Hostels"
-                    checked={selectedAnswer === "5-star Hostels"}
-                    onChange={handleSelectAnswer}
-                  />
-                  <label>5-star Hostels</label>
-                </div>
-              </div>
-              <div className="field">
-                <div className="ui radio checkbox quection-check">
-                  <input
-                    type="radio"
-                    name="accommodation"
-                    value="Bangalows"
-                    checked={selectedAnswer === "Bangalows"}
-                    onChange={handleSelectAnswer}
-                  />
-                  <label>Bungalows</label>
-                </div>
-              </div>
+              ))}
               <button onClick={handleNext} className="submit-que">
                 Next
               </button>

@@ -28,6 +28,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 	user_id = models.AutoField(primary_key=True)
 	email = models.EmailField(max_length=50, unique=True)
 	username = models.CharField(max_length=50)
+	first_answer = models.CharField(max_length=100, blank=True, null=True)
+	second_answer = models.CharField(max_length=100, blank=True, null=True)
+	third_answer = models.CharField(max_length=100, blank=True, null=True)
+	is_using_recommendations = models.BooleanField(default=False)
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['username']
 	objects = AppUserManager()

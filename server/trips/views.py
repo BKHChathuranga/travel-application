@@ -37,6 +37,15 @@ def set_destination_location(request):
         guide.setCategoryLocation(location)
         return Response({'success': True})
 
+@api_view(['POST'])
+def set_area(request):
+    if request.method == 'POST':
+        location = request.data.get('location')
+        guide = TravelGuide()
+        guide.setCategoryLocation(location)
+        response = guide.getAvailableAccomodationTypes()
+        return Response(response)
+    
 def structure_response(data):
     response = {
         "destinations": [],
@@ -47,14 +56,13 @@ def structure_response(data):
     }
 
     # Structure destinations
-    for name, district, destination_type, rating, latitude, longitude, encoded_type in zip(data['picked']['Destination'], data['picked']['District'], data['picked']['Destination Type'], data['picked']['Rating'], data['picked']['Latitude'], data['picked']['Longitude'], data['picked']['Destination Type (encoded)']):
+    for name, district, destination_type, rating, encoded_type in zip(data['picked']['Destination'], data['picked']['District'], data['picked']['Destination Type'], data['picked']['Rating'], data['picked']['Destination Type (encoded)']):
         response['destinations'].append({
             "name": name,
             "district": district,
             "destination_type": destination_type,
             "rating": rating,
-            "latitude": latitude,
-            "longitude": longitude,
+            # "image":image_destination,
             "encoded_type": encoded_type
         })
 
@@ -68,8 +76,7 @@ def structure_response(data):
             "district": district,
             "aga_division": aga_division,
             "ps_mc_uc": ps_mc_uc,
-            "latitude": latitude,
-            "longitude": longitude
+            
         })
 
     # Structure hospitals
@@ -78,8 +85,7 @@ def structure_response(data):
             "name": name,
             "district": district,
             "contact": contact,
-            "latitude": latitude,
-            "longitude": longitude
+            
         })
 
     # Structure transportation
@@ -100,8 +106,7 @@ def structure_response(data):
             "division": division,
             "police_station": police_station,
             "contact": contact,
-            "latitude": latitude,
-            "longitude": longitude
+           
         })
 
     return response
@@ -112,7 +117,6 @@ def set_accommodation_category(request):
         category = request.data.get('category')
         guide = TravelGuide()
         location = request.data.get('location')
-        guide = TravelGuide()
         guide.setCategoryLocation(location)
         
         guide.setAccomodationCategory(category)

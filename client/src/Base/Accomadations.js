@@ -118,11 +118,11 @@ function Accomadations() {
       <h4 className="sub-title-one">Other Accommodations</h4>
       <div
         className="own-card-area"
-        style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
+        style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
       >
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
+          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
         >
           {accommodations
             ?.filter(
@@ -147,13 +147,10 @@ function Accomadations() {
         </div>
       </div>
       <h4 className="sub-title-one">Villas</h4>
-      <div
-        className="own-card-area"
-        style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
-      >
+      <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
+          style={{ width: "100%", display: "flex", flexWrap: "wrap" , justifyContent:'center' }}
         >
           {accommodations
             ?.filter(
@@ -176,7 +173,7 @@ function Accomadations() {
       <div className="own-card-area">
         <div
           className="own-cards-area"
-          style={{ width: "100%", display: "flex", flexWrap: "wrap" }}
+          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center'  }}
         >
           {accommodations
             ?.filter(

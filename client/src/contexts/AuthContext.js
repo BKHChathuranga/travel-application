@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isUsingRecommendation, setIsUsingRecommendation] = useState(false);
+  const [isUsingRecommendation, setIsUsingRecommendation] = useState(localStorage.getItem("isUsingRecommendation"));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     const storedEmail = localStorage.getItem("userEmail");
    
     setIsUsingRecommendation(localStorage.getItem("isUsingRecommendation"));
+    console.log("auth", localStorage.getItem("isUsingRecommendation"))
     if (storedEmail) {
       setUser({ email: storedEmail});
     } else {
@@ -47,6 +48,10 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       localStorage.removeItem("userEmail");
       localStorage.removeItem("username");
+      localStorage.removeItem("firstAnswer");
+      localStorage.removeItem("secondAnswer");
+      localStorage.removeItem("thirdAnswer");
+      
       localStorage.removeItem("isUsingRecommendation");
       setIsUsingRecommendation(false)
     } catch (error) {

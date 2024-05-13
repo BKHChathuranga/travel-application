@@ -26,6 +26,7 @@ class AccomodationManager():
     
     def setAccomodationLocation(self, cat):
         self.ref_lat, self.ref_long = cat[0], cat[1]
+        self.district = cat[2]
         # print(cat_lat, cat_long)
 
     def getAccomodations(self):

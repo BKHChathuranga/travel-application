@@ -6,8 +6,10 @@ import {
   getRandomTransportation,
   getRecommendations,
 } from "../api/api";
+import { useAuth } from "../contexts/AuthContext";
 
 function Transportation() {
+  const { isUsingRecommendation } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAllCards, setShowAllCards] = useState(false);
   const initialCardCount = 3; // Default number of cards to show initially
@@ -22,38 +24,41 @@ function Transportation() {
   const [cardCount, setCardCount] = useState(initialCardCount);
 
   useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (!localStorage.getItem("isUsingRecommendation")) {
+    fetchRecommendations();
+  }, [isUsingRecommendation, localStorage.getItem("isUsingRecommendation")]);
+
+  const fetchRecommendations = async () => {
+    try {
+      const test = isUsingRecommendation;
+
+      if (!test) {
         // Fetch transportation
+        console.log("inside the random");
         getRandomTransportation()
           .then((response) => {
+            console.log(response, "random");
             setTransportations(response.data);
           })
           .catch((error) => {
             console.error("Error fetching transportation:", error);
           });
       } else {
-        try {
-          const destinationsResponse = await getDestinations({
-            category: localStorage.getItem("firstAnswer"),
-          });
-          const recommendationsResponse = await getRecommendations({
-            category: localStorage.getItem("thirdAnswer"),
-            location: localStorage.getItem("secondAnswer"),
-          });
-          if (recommendationsResponse.status === 200) {
-            setTransportations(recommendationsResponse.data.transportation);
-            console.log(recommendationsResponse.data.transportation)
-          }
-        } catch (error) {
-          console.error("Error fetching recommendations:", error);
+        const destinationsResponse = await getDestinations({
+          category: localStorage.getItem("firstAnswer"),
+        });
+        const recommendationsResponse = await getRecommendations({
+          category: localStorage.getItem("thirdAnswer"),
+          location: localStorage.getItem("secondAnswer"),
+        });
+        if (recommendationsResponse.status === 200) {
+          setTransportations(recommendationsResponse.data.transportation);
+          console.log(recommendationsResponse.data.transportation);
         }
       }
-    };
-
-    fetchRecommendations();
-  }, [localStorage.getItem("isUsingRecommendation")]);
-
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+    }
+  };
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -116,16 +121,28 @@ function Transportation() {
       {/* Vehicle Renting */}
       <h4 className="sub-title-one">Vehicle Renting</h4>
       <div className="own-card-area">
-        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
+        <div
+          className="own-cards-area"
+          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
+        >
           {transportations
-            .filter((transportation) =>
-              transportation.name?.toLowerCase().includes("rent") || transportation.Name?.toLowerCase().includes("rent")
+            .filter(
+              (transportation) =>
+                transportation.name?.toLowerCase().includes("rent") ||
+                transportation.Name?.toLowerCase().includes("rent")
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" feature="rent"/>
+              <Card
+                key={index}
+                data={transportation}
+                type="transportation"
+                feature="rent"
+              />
             ))}
-          {transportations.filter((transportation) =>
-            transportation.name?.toLowerCase().includes("rent") ||  transportation.Name?.toLowerCase().includes("rent")
+          {transportations.filter(
+            (transportation) =>
+              transportation.name?.toLowerCase().includes("rent") ||
+              transportation.Name?.toLowerCase().includes("rent")
           ).length > initialCardCount && !showMore.renting ? (
             <div className="load-more-btn-wrapper">
               {/* <button
@@ -160,16 +177,30 @@ function Transportation() {
       {/* Cab Services */}
       <h4 className="sub-title-one">Cab Services</h4>
       <div className="own-card-area">
-        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
+        <div
+          className="own-cards-area"
+          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
+        >
           {transportations
-            .filter((transportation) =>
-              transportation.name?.toLowerCase().includes("cab") || transportation.name?.toLowerCase().includes("cabs") || transportation.Name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("cabs")
+            .filter(
+              (transportation) =>
+                transportation.name?.toLowerCase().includes("cab") ||
+                transportation.name?.toLowerCase().includes("cabs") ||
+                transportation.Name?.toLowerCase().includes("cab") ||
+                transportation.Name?.toLowerCase().includes("cabs")
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" feature="cab"/>
+              <Card
+                key={index}
+                data={transportation}
+                type="transportation"
+                feature="cab"
+              />
             ))}
-          {transportations.filter((transportation) =>
-            transportation.name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("cab")
+          {transportations.filter(
+            (transportation) =>
+              transportation.name?.toLowerCase().includes("cab") ||
+              transportation.Name?.toLowerCase().includes("cab")
           ).length > initialCardCount && !showMore.cab ? (
             <div className="load-more-btn-wrapper">
               {/* <button
@@ -204,24 +235,34 @@ function Transportation() {
       {/* Other Transportation */}
       <h4 className="sub-title-one">Other Transportation</h4>
       <div className="own-card-area">
-        <div className="own-cards-area" style={{ width: "100%", display:'flex', flexWrap: 'wrap' }}>
+        <div
+          className="own-cards-area"
+          style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent:'center' }}
+        >
           {transportations
             .filter(
               (transportation) =>
                 !(
                   transportation.name?.toLowerCase().includes("rent") ||
-                  transportation.name?.toLowerCase().includes("cab") ||  transportation.Name?.toLowerCase().includes("rent") ||
+                  transportation.name?.toLowerCase().includes("cab") ||
+                  transportation.Name?.toLowerCase().includes("rent") ||
                   transportation.Name?.toLowerCase().includes("cab")
                 )
             )
             .map((transportation, index) => (
-              <Card key={index} data={transportation} type="transportation" feature="other"/>
+              <Card
+                key={index}
+                data={transportation}
+                type="transportation"
+                feature="other"
+              />
             ))}
           {transportations.filter(
             (transportation) =>
               !(
                 transportation.name?.toLowerCase().includes("rent") ||
-                transportation.name?.toLowerCase().includes("cab") || transportation.Name?.toLowerCase().includes("rent") ||
+                transportation.name?.toLowerCase().includes("cab") ||
+                transportation.Name?.toLowerCase().includes("rent") ||
                 transportation.Name?.toLowerCase().includes("cab")
               )
           ).length > initialCardCount && !showMore.other ? (

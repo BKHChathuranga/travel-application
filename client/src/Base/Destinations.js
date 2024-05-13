@@ -12,7 +12,7 @@ function Destinations() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAllCards, setShowAllCards] = useState(false);
   const initialCardCount = 3; // Default number of cards to show initially
-  const totalCount = 15; // Total number of cards available
+  const totalCount = 21; // Total number of cards available
   const [destinations, setDestinations] = useState([]);
   const [cardCount, setCardCount] = useState(initialCardCount);
   useEffect(() => {
