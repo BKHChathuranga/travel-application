@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trips',
     'test',
+    'reviews',
     'user.apps.UserConfig'
 ]
 
